@@ -64,6 +64,7 @@ const BookPage = () => {
             ? new Date(book.availability.dueDate).toLocaleDateString() : "-"}</p>
           <p>Borrower: {book.availability.borrower || "-"}</p>
           <button onClick={() => handleGoHome()}>Back</button>
+          <button onClick={() => navigate(`/edit-book/${book._id}`)}>Edit</button>
           <button onClick={() => onDeleteClick(book._id)}>Delete</button>
         </>
       )}
