@@ -1,7 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const EditBookPage = () => {
+const EditBookPage = ({isAuthenticated}) => {
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : null;
 
   const {id} = useParams();
   const navigate = useNavigate();
@@ -38,7 +41,9 @@ const EditBookPage = () => {
     try {
       const res = await fetch(`/api/books/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+         },
         body: JSON.stringify(updatedBook),
       });
       if (!res.ok) throw new Error("Failed to update book");

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 const AddBookPage = () => {
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user ? user.token : null;
 
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -20,7 +22,9 @@ const AddBookPage = () => {
     try {
       const res = await fetch("/api/books", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+         },
         body: JSON.stringify(newBook),
       });
       if (!res.ok) throw new Error("Failed to add book");
