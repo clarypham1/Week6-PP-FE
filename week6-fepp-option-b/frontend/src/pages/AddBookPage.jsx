@@ -1,37 +1,114 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 const AddBookPage = () => {
+
+
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [publisher, setPublisher] = useState("");
+  const [genre, setGenre] = useState("");
+  const [isAvailable, setIsAvailable] = useState("true");
+  const [dueDate, setDueDate] = useState("");
+  const [borrower, setBorrower] = useState("");
+
+  const navigate = useNavigate(); //FOR NOW
+
+  const addBook = async (newBook) => {
+    try {
+      const res = await fetch("/api/books", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newBook),
+      });
+      if (!res.ok) throw new Error("Failed to add book");
+    } catch (error) {
+      console.error(error);
+      return false;  //HERE
+    }
+    return true; //HERE
+  };                              
+
   const submitForm = (e) => {
     e.preventDefault();
-    console.log("submitForm called");
-  };
+    const newBook = {
+      title,
+      author,
+      isbn,
+      publisher,
+      genre,
+      availability: {
+        isAvailable: isAvailable === "true",
+        dueDate: dueDate || null,
+        borrower,
+      },
+    };
+    addBook(newBook);
+    console.log(newBook);
 
+    return navigate("/");
+  };
   return (
     <div className="create">
       <h2>Add a New Book</h2>
       <form onSubmit={submitForm}>
+
         <label>Book Title:</label>
-        <input type="text" required />
+        <input type="text" required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)} />
+
         <label>Author:</label>
-        <input type="text" required />
+        <input type="text" required
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)} />
+
         <label>ISBN:</label>
-        <input type="text" required />
+        <input type="text" required
+          value={isbn}
+          onChange={(e) => setIsbn(e.target.value)} />
+
         <label>Publisher:</label>
-        <input type="text" required />
+        <input type="text" required
+          value={publisher}
+          onChange={(e) => setPublisher(e.target.value)} />
+
         <label>Genre:</label>
-        <input type="text" required />
+        <input type="text" required
+          value={genre}
+          onChange={(e) => setGenre(e.target.value)} />
+
         <label>Available:</label>
-        <select>
+        <select
+          value={isAvailable}
+          onChange={(e) => setIsAvailable(e.target.value)}>
+
           <option value="true">Yes</option>
           <option value="false">No</option>
         </select>
+
         <label>Due Date:</label>
-        <input type="date" />
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+        />
+
+
         <label>Borrower:</label>
-        <input type="text" />
+        <input type="text"
+          value={borrower}
+          onChange={(e) => setBorrower(e.target.value)} />
+
         <button>Add Book</button>
       </form>
     </div>
   );
 };
+
+
 
 export default AddBookPage;
 
