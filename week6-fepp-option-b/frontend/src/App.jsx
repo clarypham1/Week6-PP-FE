@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // pages & components
 import Home from "./pages/HomePage";
@@ -7,6 +7,8 @@ import Navbar from "./components/Navbar";
 import NotFoundPage from "./pages/NotFoundPage";
 import BookPage from "./pages/BookPage";
 import EditBookPage from "./pages/EditBookPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
             <Route path="*" element={<NotFoundPage />} />
             <Route path="/books/:id" element={<BookPage />} />
             <Route path="/edit-book/:id" element={<EditBookPage />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </BrowserRouter>
