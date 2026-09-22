@@ -9,6 +9,18 @@ const BookPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const deleteBook = async (bookId) => {
+    try {
+      const res = await fetch(`/api/books/${bookId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete book");
+    } catch (error) {
+      console.error("Error deleting book:", error);
+    }
+  };
+
+
   useEffect(() => {
     const fetchBook = async () => {
       try {
@@ -29,6 +41,13 @@ const BookPage = () => {
     navigate("/");
   };
 
+  const onDeleteClick = (bookId) => {
+    const confirm = window.confirm("Are you sure you want to delete this book?");
+    if (!confirm) return;
+    deleteBook(bookId);
+    navigate("/");
+  }; 
+
   return (
     <div className="book-preview">
       {loading ? (
@@ -45,6 +64,7 @@ const BookPage = () => {
             ? new Date(book.availability.dueDate).toLocaleDateString() : "-"}</p>
           <p>Borrower: {book.availability.borrower || "-"}</p>
           <button onClick={() => handleGoHome()}>Back</button>
+          <button onClick={() => onDeleteClick(book._id)}>Delete</button>
         </>
       )}
     </div>
